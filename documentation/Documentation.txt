@@ -1,0 +1,88 @@
+1. Project Overview
+
+Project Name: Small Office Enterprise Network
+
+Platform: Cisco Packet Tracer
+
+Project Type: Enterprise Networking / Network Infrastructure
+
+Objective:
+
+Design and implement a small enterprise network that provides departmental segmentation, centralized DHCP services, controlled access to server resources, and connectivity to an external network.
+
+2. Requirements
+
+- Three departmental networks
+- A dedicated Server VLAN
+- DHCP addressing for client PCs
+- Inter-VLAN communication
+- Controlled access to server resources
+- Internet/external network connectivity
+- Network address translation
+
+3. IP Addressing Scheme
+
+VLAN	Purpose	  Network                 Gateway	             DHCP Range
+10	Sales	192.168.10.0/24	192.168.10.1	.2–.4
+20	IT	192.168.20.0/24	192.168.20.1	.2–.4
+30	HR	192.168.30.0/24	192.168.30.1	.2–.4
+40	ACCTS	192.168.40.0/24	192.168.40.1	.2–.4
+50	Servers	192.168.50.0/24	192.168.50.1	Static
+
+DHCP SERVER: 192.168.50.10/24
+Gateway: 192.168.50.1
+
+WAN: 
+Enterprise Router: 203.0.113.2/30
+ISP Router:        203.0.113.1/30
+
+4. VLAN Configuration:
+
+VLANs were implemented to logically separate departments into different broadcast domains and improve network organization and security.
+
+5. Router-on-a-Stick
+
+Because multiple VLANs need to communicate, a router-on-a-stick configuration was implemented using 802.1Q subinterfaces.
+
+6. DHCP
+
+A centralized DHCP server was placed in VLAN 40. DHCP relay was configured on the router's client VLAN interfaces so that DHCP broadcasts could reach the server across VLAN boundaries.
+
+7. ACL / Security
+
+Security requirement
+
+HR users should not have access to resources located in the Server VLAN, while Sales and IT should retain access.
+
+8. NAT/PAT
+
+NAT/PAT was implemented to allow private IPv4 addresses used by internal VLANs to access a simulated external network through a single WAN address.
+
+9. Testing & Troubleshooting
+
+
+Test	                    Expected Result	                  Actual Result
+Sales receives DHCP	 Pass                              Pass
+HR receives DHCP	                 Pass	                      Pass 
+IT receives DHCP	                 Pass	                      Pass
+HR → Server	               Blocked	                    Blocked
+Sales → Server	               Allowed	                     Allowed
+IT → Server	               Allowed	                     Allowed
+Internal → External	Allowed	                     Allowed
+NAT translation	               Created	                     Created
+
+10. Lessons Learned
+
+Lessons Learned:
+
+- VLANs provide logical network segmentation.
+- Trunking allows multiple VLANs to traverse a single physical link.
+- Router-on-a-Stick enables inter-VLAN routing.
+- DHCP relay allows a centralized DHCP server to serve multiple VLANs.
+- Extended ACLs can control traffic based on source and destination networks.
+- NAT/PAT allows private networks to communicate with external networks.
+- Troubleshooting requires testing each layer systematically.
+
+11. Future Improvements
+
+Future improvements could include implementing redundant switches/routers, dynamic routing, wireless networking, additional security controls, and centralized network monitoring.
